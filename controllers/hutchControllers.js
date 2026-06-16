@@ -1,6 +1,6 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
-const { getToken } = require("../utils/hutchService");
+const { getToken } = require("../utils/hutchservice");
 
 const baseUrl = process.env.HUTCH_BASE_URL;
 
