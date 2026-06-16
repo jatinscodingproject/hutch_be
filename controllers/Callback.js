@@ -2,7 +2,9 @@ const CallbackLog = require("../models/model.callback");
 
 exports.storeCallback = async (req, res) => {
   try {
+    console.log(req);
     const payload = req.body || {};
+    console.log(payload);
     const eventDetails = payload.event_details || {};
     const msisdn = payload.number ? String(payload.number) : null;
     const chargeResult =
