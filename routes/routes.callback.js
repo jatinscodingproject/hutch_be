@@ -3,6 +3,6 @@ const { storeCallback } = require("../controllers/Callback");
 
 const router = express.Router();
 
-router.post("/notify-callback", storeCallback);
+router.post("/hutch/notify", storeCallback);
 
 module.exports = router;
