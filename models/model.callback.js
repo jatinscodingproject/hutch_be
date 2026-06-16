@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../Config/db");
+const sequelize = require("../config/db");
 
 const CallbackLog = sequelize.define(
   "hutch_callback_logs",
