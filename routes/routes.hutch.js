@@ -4,7 +4,9 @@ const {
     sendOtp,
     verifyOtp,
     status,
-    unsubscribe
+    unsubscribe,
+    redirectToReactYumzzy,
+    redirectToReactLearn
 } = require("../controllers/hutchControllers");
 
 const router = express.Router();
