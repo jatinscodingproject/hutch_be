@@ -146,3 +146,59 @@ exports.unsubscribe = async (req, res) => {
         res.status(500).json(e.response?.data || e.message);
     }
 };
+
+exports.redirectToReactYumzzy = async (req, res) => {
+  try {
+    const { number, bundle_id } = req.body;
+
+    const jwtToken = jwt.sign(
+      {
+        msisdn: number,
+        bundle_id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "30d",
+      }
+    );
+
+    return res.redirect(
+      `https://sl.yumzyy.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
+    );
+  } catch (error) {
+    console.error("Redirect Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to redirect user",
+    });
+  }
+};
+
+exports.redirectToReactLearn = async (req, res) => {
+  try {
+    const { number, bundle_id } = req.body;
+
+    const jwtToken = jwt.sign(
+      {
+        msisdn: number,
+        bundle_id,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "30d",
+      }
+    );
+
+    return res.redirect(
+      `https://sl.eduwav.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
+    );
+  } catch (error) {
+    console.error("Redirect Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to redirect user",
+    });
+  }
+};

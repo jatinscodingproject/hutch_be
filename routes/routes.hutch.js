@@ -13,6 +13,8 @@ router.post("/send-otp", sendOtp);
 router.post("/verify-otp", verifyOtp);
 router.post("/status", status);
 router.post("/unsubscribe", unsubscribe);
+router.post("/redirect-yumzzy", redirectToReactYumzzy);
+router.post("/redirect-eduwav", redirectToReactLearn);
 
 router.get("/detect-user", async (req, res) => {
   try {
