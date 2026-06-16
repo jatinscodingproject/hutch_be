@@ -5,7 +5,7 @@ const cors = require("cors");
 
 const hutchRoutes = require("./routes/routes.hutch");
 const callbackRoutes = require("./routes/routes.callback");
-
+const sequelize = require("./config/db");
 const app = express();
 
 const allowedOrigins = [
@@ -56,3 +56,16 @@ app.use("/", callbackRoutes);
 app.listen(process.env.PORT, () => {
     console.log(`Server running on ${process.env.PORT}`);
 });
+
+sequelize
+  .sync({ alter: true }) // or sync()
+  .then(() => {
+    console.log("Database synced");
+
+    app.listen(process.env.PORT, () => {
+      console.log(`Server running on ${process.env.PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("DB Sync Error:", err);
+  });
