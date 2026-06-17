@@ -149,41 +149,45 @@ exports.unsubscribe = async (req, res) => {
 
 exports.redirectToReactYumzzy = async (req, res) => {
   try {
-    const number =
-      req.headers.msisdn ||
-      req.headers["x-msisdn"];
+    const number = req.session.msisdn;
 
-    const bundle_id = req.query.bundle_id || "";
+    if (!number) {
+      return res.status(400).json({
+        success: false,
+        message: "MSISDN not found in session"
+      });
+    }
 
     const jwtToken = jwt.sign(
       {
-        msisdn: number,
-        bundle_id,
+        msisdn: number
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "30d",
+        expiresIn: "30d"
       }
     );
+
+    delete req.session.msisdn;
 
     return res.redirect(
       `http://sl.yumzyy.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
     );
   } catch (error) {
     console.error("Redirect Error:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Failed to redirect user",
-    });
   }
 };
 
 exports.redirectToReactLearn = async (req, res) => {
   try {
-    const number =
-      req.headers.msisdn ||
-      req.headers["x-msisdn"];
+    const number = req.session.msisdn;
+
+    if (!number) {
+      return res.status(400).json({
+        success: false,
+        message: "MSISDN not found in session",
+      });
+    }
 
     const bundle_id = req.query.bundle_id || "";
 
@@ -197,6 +201,8 @@ exports.redirectToReactLearn = async (req, res) => {
         expiresIn: "30d",
       }
     );
+
+    delete req.session.msisdn;
 
     return res.redirect(
       `http://sl.eduwav.com/auth/callback?token=${encodeURIComponent(jwtToken)}`

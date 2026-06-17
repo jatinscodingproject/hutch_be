@@ -28,10 +28,12 @@ router.get("/detect-user", async (req, res) => {
 
     const forwardedFor = req.headers["x-forwarded-for"];
     const userAgent = req.headers["user-agent"];
-
+    
     console.log("Headers:", req.headers);
 
     if (msisdn) {
+      req.session.msisdn = msisdn;
+
       return res.json({
         success: true,
         detected: true,

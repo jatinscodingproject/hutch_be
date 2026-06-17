@@ -7,6 +7,18 @@ const hutchRoutes = require("./routes/routes.hutch");
 const callbackRoutes = require("./routes/routes.callback");
 const sequelize = require("./config/db");
 const app = express();
+const session = require("express-session");
+
+app.use(
+  session({
+    secret: process.env.JWT_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+    }
+  })
+);
 
 const allowedOrigins = [
     "http://sl.yumzyy.com",
