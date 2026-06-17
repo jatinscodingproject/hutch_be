@@ -19,31 +19,28 @@ const allowedOrigins = [
     "http://www.sl.eduwav.com",
     "https://www.sl.eduwav.com",
 
+    "http://consent.hutch.lk",
+    "https://consent.hutch.lk",
+
     "http://localhost:3000",
     "http://localhost:5173",
     "http://127.0.0.1:5173"
 ];
 
+
 app.use(
     cors({
-        origin: function (origin, callback) {
-            // Allow Postman, server-to-server requests, etc.
-            if (!origin) return callback(null, true);
-
-            if (allowedOrigins.includes(origin)) {
-                return callback(null, true);
-            }
-
-            return callback(
-                new Error(`CORS blocked for origin: ${origin}`)
-            );
-        },
+        origin: true,
         credentials: true,
         methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
         allowedHeaders: [
             "Content-Type",
             "Authorization",
-            "Accept"
+            "Accept",
+            "msisdn",
+            "x-msisdn",
+            "subscriberid",
+            "x-subscriber-id"
         ]
     })
 );
