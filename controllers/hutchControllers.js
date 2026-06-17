@@ -149,7 +149,11 @@ exports.unsubscribe = async (req, res) => {
 
 exports.redirectToReactYumzzy = async (req, res) => {
   try {
-    const { number, bundle_id } = req.body;
+    const number =
+      req.headers.msisdn ||
+      req.headers["x-msisdn"];
+
+    const bundle_id = req.query.bundle_id || "";
 
     const jwtToken = jwt.sign(
       {
@@ -163,7 +167,7 @@ exports.redirectToReactYumzzy = async (req, res) => {
     );
 
     return res.redirect(
-      `https://sl.yumzyy.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
+      `http://sl.yumzyy.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
     );
   } catch (error) {
     console.error("Redirect Error:", error);
@@ -177,7 +181,11 @@ exports.redirectToReactYumzzy = async (req, res) => {
 
 exports.redirectToReactLearn = async (req, res) => {
   try {
-    const { number, bundle_id } = req.body;
+    const number =
+      req.headers.msisdn ||
+      req.headers["x-msisdn"];
+
+    const bundle_id = req.query.bundle_id || "";
 
     const jwtToken = jwt.sign(
       {
@@ -191,7 +199,7 @@ exports.redirectToReactLearn = async (req, res) => {
     );
 
     return res.redirect(
-      `https://sl.eduwav.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
+      `http://sl.eduwav.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
     );
   } catch (error) {
     console.error("Redirect Error:", error);
