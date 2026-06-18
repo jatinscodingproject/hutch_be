@@ -31,16 +31,24 @@ router.get("/detect-user", async (req, res) => {
     
     console.log("Headers:", req.headers);
 
-    if (msisdn) {
-      req.session.msisdn = msisdn;
+    console.log("DETECT SESSION ID:", req.sessionID);
 
-      return res.json({
-        success: true,
-        detected: true,
-        msisdn,
-        userAgent,
-        forwardedFor,
-      });
+    if (msisdn) {
+        req.session.msisdn = msisdn;
+
+        console.log("SAVED MSISDN:", req.session.msisdn);
+
+        req.session.save((err) => {
+            if (err) {
+                console.log("SESSION SAVE ERROR:", err);
+            }
+
+            return res.json({
+                success: true,
+                detected: true,
+                msisdn
+            });
+        });
     }
 
     return res.json({

@@ -31,8 +31,6 @@ async function getToken() {
         }
     );
 
-
-
     accessToken = response.data.access_token;
 
     console.log("lavda le" , response);
