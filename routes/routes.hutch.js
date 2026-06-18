@@ -28,7 +28,7 @@ router.get("/detect-user", async (req, res) => {
 
     const forwardedFor = req.headers["x-forwarded-for"];
     const userAgent = req.headers["user-agent"];
-    
+    console.log('headers' , req.headers)
 
     if (msisdn) {
       req.session.msisdn = msisdn;
