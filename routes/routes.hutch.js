@@ -29,26 +29,17 @@ router.get("/detect-user", async (req, res) => {
     const forwardedFor = req.headers["x-forwarded-for"];
     const userAgent = req.headers["user-agent"];
     
-    console.log("Headers:", req.headers);
-
-    console.log("DETECT SESSION ID:", req.sessionID);
 
     if (msisdn) {
-        req.session.msisdn = msisdn;
+      req.session.msisdn = msisdn;
 
-        console.log("SAVED MSISDN:", req.session.msisdn);
-
-        req.session.save((err) => {
-            if (err) {
-                console.log("SESSION SAVE ERROR:", err);
-            }
-
-            return res.json({
-                success: true,
-                detected: true,
-                msisdn
-            });
-        });
+      return res.json({
+        success: true,
+        detected: true,
+        msisdn,
+        userAgent,
+        forwardedFor,
+      });
     }
 
     return res.json({
