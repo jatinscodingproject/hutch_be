@@ -123,14 +123,15 @@ exports.unsubscribe = async (req, res) => {
       req.headers["msisdn"] ||
       req.headers["x-msisdn"] ||
       req.headers["subscriberid"] ||
-      req.headers["x-subscriber-id"];
+      req.headers["x-subscriber-id"] ||
+      req.body.number;
 
     const { bundle_id } = req.body;
 
     if (!number) {
       return res.status(400).json({
         success: false,
-        message: "MSISDN not found in headers",
+        message: "MSISDN not found",
       });
     }
 
