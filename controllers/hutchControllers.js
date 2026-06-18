@@ -118,37 +118,57 @@ exports.status = async (req, res) => {
 };
 
 exports.unsubscribe = async (req, res) => {
+  try {
+    const number =
+      req.headers["msisdn"] ||
+      req.headers["x-msisdn"] ||
+      req.headers["subscriberid"] ||
+      req.headers["x-subscriber-id"];
 
-    try {
+    const { bundle_id } = req.body;
 
-        const {
-            number,
-            bundle_id
-        } = req.body;
-
-        const token = await getToken();
-
-        const response = await axios.post(
-            `${baseUrl}/api/deregister`,
-            {
-                number,
-                bundle_id
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: "application/json",
-                    "Content-Type":
-                        "application/json"
-                }
-            }
-        );
-
-        res.json(response.data);
-
-    } catch (e) {
-        res.status(500).json(e.response?.data || e.message);
+    if (!number) {
+      return res.status(400).json({
+        success: false,
+        message: "MSISDN not found in headers",
+      });
     }
+
+    if (!bundle_id) {
+      return res.status(400).json({
+        success: false,
+        message: "bundle_id is required",
+      });
+    }
+
+    const token = await getToken();
+
+    const response = await axios.post(
+      `${baseUrl}/api/deregister`,
+      {
+        number,
+        bundle_id,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return res.json(response.data);
+  } catch (e) {
+    console.error("Unsubscribe Error:", e.response?.data || e.message);
+
+    return res.status(500).json(
+      e.response?.data || {
+        success: false,
+        message: e.message,
+      }
+    );
+  }
 };
 
 exports.redirectToReactYumzzy = async (req, res) => {
