@@ -63,9 +63,9 @@ app.use("/api/hutch", hutchRoutes);
 app.use("/", callbackRoutes);
 
 
-app.listen(process.env.PORT, () => {
-    console.log(`Server running on ${process.env.PORT}`);
-});
+// app.listen(process.env.PORT, () => {
+//     console.log(`Server running on ${process.env.PORT}`);
+// });
 
 sequelize
   .sync({ alter: true }) // or sync()
