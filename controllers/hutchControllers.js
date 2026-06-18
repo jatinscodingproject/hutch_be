@@ -23,7 +23,7 @@ exports.sendOtp = async (req, res) => {
         },
       }
     );
-
+    console.log('send otp response' , response)
     return res.json(response.data);
   } catch (e) {
     console.log(e.response?.data || e);
@@ -51,6 +51,8 @@ exports.verifyOtp = async (req, res) => {
         },
       }
     );
+
+    console.log('otp response' , response)
 
     const jwtToken = jwt.sign(
       {
@@ -105,6 +107,8 @@ exports.status = async (req, res) => {
                 }
             }
         );
+
+        console.log('status resposne' , response)
 
         res.json(response.data);
 
