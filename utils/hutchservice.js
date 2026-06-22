@@ -32,9 +32,6 @@ async function getToken() {
     );
 
     accessToken = response.data.access_token;
-
-    console.log("lavda le" , response);
-
     expiresAt =
         Date.now() +
         (response.data.expires_in - 60) * 1000;
