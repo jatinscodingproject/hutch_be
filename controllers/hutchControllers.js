@@ -174,7 +174,9 @@ exports.unsubscribe = async (req, res) => {
 
 exports.redirectToReactYumzzy = async (req, res) => {
   try {
-     console.log("Session:", req.session);
+    console.log("Session ID:", req.sessionID);
+    console.log("Session Data:", req.session);
+    console.log("Cookie:", req.headers.cookie);
 
     const bundle_id = req.query.bundle_id || "";
 
@@ -203,7 +205,9 @@ exports.redirectToReactYumzzy = async (req, res) => {
 
 exports.redirectToReactLearn = async (req, res) => {
   try {
-    console.log("Session:", req.session);
+    console.log("Session ID:", req.sessionID);
+    console.log("Session Data:", req.session);
+    console.log("Cookie:", req.headers.cookie);
 
     const bundle_id = req.query.bundle_id || "";
 

@@ -26,20 +26,26 @@ router.get("/detect-user", async (req, res) => {
       req.headers["subscriberid"] ||
       req.headers["x-subscriber-id"];
 
-    const forwardedFor = req.headers["x-forwarded-for"];
-    const userAgent = req.headers["user-agent"];
-    console.log('headers' , req.headers)
-
     if (msisdn) {
       req.session.msisdn = msisdn;
 
-      return res.json({
-        success: true,
-        detected: true,
-        msisdn,
-        userAgent,
-        forwardedFor,
+      console.log("Before save:", req.session);
+
+      req.session.save((err) => {
+        if (err) {
+          console.error("Session save error:", err);
+        }
+
+        console.log("After save:", req.session);
+
+        return res.json({
+          success: true,
+          detected: true,
+          msisdn,
+        });
       });
+
+      return;
     }
 
     return res.json({
@@ -48,11 +54,6 @@ router.get("/detect-user", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Detection failed",
-    });
   }
 });
 
