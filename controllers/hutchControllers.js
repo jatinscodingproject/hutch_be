@@ -84,7 +84,7 @@ exports.verifyOtp = async (req, res) => {
 exports.status = async (req, res) => {
 
     try {
-
+        
         const {
             number,
             bundle_id
@@ -174,6 +174,7 @@ exports.unsubscribe = async (req, res) => {
 
 exports.redirectToReactYumzzy = async (req, res) => {
   try {
+    console.log("req.headers.yumzzy" , req.headers);
     const bundle_id = req.query.bundle_id || "";
 
     const jwtToken = jwt.sign(
@@ -201,6 +202,7 @@ exports.redirectToReactYumzzy = async (req, res) => {
 
 exports.redirectToReactLearn = async (req, res) => {
   try {
+    console.log("req.headers.learn" , req.headers);
     const bundle_id = req.query.bundle_id || "";
 
     const jwtToken = jwt.sign(
