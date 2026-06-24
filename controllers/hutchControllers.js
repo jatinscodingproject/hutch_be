@@ -174,11 +174,14 @@ exports.unsubscribe = async (req, res) => {
 
 exports.redirectToReactYumzzy = async (req, res) => {
   try {
+    
+    const bundle_id = req.query.bundle_id || "";
+
+    const msisdn = req.session?.msisdn || null;
+
+    console.log("MSISDN:", msisdn);
     console.log("Session ID:", req.sessionID);
     console.log("Session Data:", req.session);
-    console.log("Cookie:", req.headers.cookie);
-
-    const bundle_id = req.query.bundle_id || "";
 
     const jwtToken = jwt.sign(
       {
@@ -205,11 +208,14 @@ exports.redirectToReactYumzzy = async (req, res) => {
 
 exports.redirectToReactLearn = async (req, res) => {
   try {
-    console.log("Session ID:", req.sessionID);
-    console.log("Session Data:", req.session);
-    console.log("Cookie:", req.headers.cookie);
 
     const bundle_id = req.query.bundle_id || "";
+
+    const msisdn = req.session?.msisdn || null;
+
+    console.log("MSISDN:", msisdn);
+    console.log("Session ID:", req.sessionID);
+    console.log("Session Data:", req.session);
 
     const jwtToken = jwt.sign(
       {

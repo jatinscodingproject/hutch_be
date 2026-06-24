@@ -18,44 +18,44 @@ router.post("/unsubscribe", unsubscribe);
 router.post("/redirect-yumzzy", redirectToReactYumzzy);
 router.post("/redirect-eduwav", redirectToReactLearn);
 
-router.get("/detect-user", async (req, res) => {
-  try {
-    const msisdn =
-      req.headers["msisdn"] ||
-      req.headers["x-msisdn"] ||
-      req.headers["subscriberid"] ||
-      req.headers["x-subscriber-id"];
+  router.get("/detect-user", async (req, res) => {
+    try {
+      const msisdn =
+        req.headers["msisdn"] ||
+        req.headers["x-msisdn"] ||
+        req.headers["subscriberid"] ||
+        req.headers["x-subscriber-id"];
 
-    if (msisdn) {
-      req.session.msisdn = msisdn;
+      if (msisdn) {
+        req.session.msisdn = msisdn;
 
-      console.log("Before save:", req.session);
+        console.log("Before save:", req.session);
 
-      req.session.save((err) => {
-        if (err) {
-          console.error("Session save error:", err);
-        }
+        req.session.save((err) => {
+          if (err) {
+            console.error("Session save error:", err);
+          }
 
-        console.log("After save:", req.session);
+          console.log("After save:", req.session);
 
-        return res.json({
-          success: true,
-          detected: true,
-          msisdn,
+          return res.json({
+            success: true,
+            detected: true,
+            msisdn,
+          });
         });
+
+        return;
+      }
+
+      return res.json({
+        success: true,
+        detected: false,
       });
-
-      return;
+    } catch (error) {
+      console.error(error);
     }
-
-    return res.json({
-      success: true,
-      detected: false,
-    });
-  } catch (error) {
-    console.error(error);
-  }
-});
+  });
 
 
 module.exports = router;
