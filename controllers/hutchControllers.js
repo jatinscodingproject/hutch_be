@@ -33,6 +33,58 @@ exports.sendOtp = async (req, res) => {
   }
 };
 
+// exports.verifyOtp = async (req, res) => {
+//   try {
+//     const { number, bundle_id, otp } = req.body;
+
+//     const token = await getToken();
+
+//     const response = await axios.post(
+//       `${baseUrl}/api/register-with-otp`,
+//       {
+//         number,
+//         bundle_id,
+//         otp,
+//       },
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           Accept: "application/json",
+//         },
+//       }
+//     );
+
+//     // console.log('otp response' , response)
+
+//     const jwtToken = jwt.sign(
+//       {
+//         msisdn: number,
+//         bundle_id,
+//       },
+//       process.env.JWT_SECRET,
+//       {
+//         expiresIn: "24h",
+//       }
+//     );
+
+//     return res.json({
+//       success: true,
+//       token: jwtToken,
+//       subscription: response.data,
+//     });
+//   } catch (e) {
+//     console.log(e.response?.data || e);
+
+//     return res.status(500).json(
+//       e.response?.data || {
+//         message: "OTP verification failed",
+//       }
+//     );
+//   }
+// };
+
+const { Op } = require("sequelize");
+
 exports.verifyOtp = async (req, res) => {
   try {
     const { number, bundle_id, otp } = req.body;
@@ -54,7 +106,59 @@ exports.verifyOtp = async (req, res) => {
       }
     );
 
-    // console.log('otp response' , response)
+    // Save MSISDN in session
+    req.session.msisdn = number;
+
+    await new Promise((resolve, reject) => {
+      req.session.save((err) => {
+        if (err) return reject(err);
+        resolve();
+      });
+    });
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    // Wait for Hutch callback (max 10 seconds)
+    let callback = null;
+
+    for (let i = 0; i < 5; i++) {
+      callback = await CallbackLog.findOne({
+        where: {
+          msisdn: number,
+          bundle_id: Number(bundle_id),
+          event_id: {
+            [Op.in]: [1, 3],
+          },
+          charge_result: 1,
+          createdAt: {
+            [Op.between]: [startOfDay, endOfDay],
+          },
+        },
+        order: [["createdAt", "DESC"]],
+      });
+
+      if (callback) break;
+
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+    }
+
+    let portalUrl = "http://sl.eduwav.com";
+
+    if (Number(bundle_id) === 1235) {
+      portalUrl = "http://sl.yumzyy.com";
+    }
+
+    if (!callback) {
+      return res.redirect(
+        `${portalUrl}/auth/callback?status=failed&message=${encodeURIComponent(
+          "Insufficient balance. Subscription could not be activated."
+        )}`
+      );
+    }
 
     const jwtToken = jwt.sign(
       {
@@ -63,22 +167,30 @@ exports.verifyOtp = async (req, res) => {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "30d",
+        expiresIn: "24h",
       }
     );
 
-    return res.json({
-      success: true,
-      token: jwtToken,
-      subscription: response.data,
-    });
+    return res.redirect(
+      `${portalUrl}/auth/callback?status=success&token=${encodeURIComponent(
+        jwtToken
+      )}`
+    );
   } catch (e) {
-    console.log(e.response?.data || e);
+    console.error(e.response?.data || e);
 
-    return res.status(500).json(
-      e.response?.data || {
-        message: "OTP verification failed",
-      }
+    const bundleId = Number(req.body.bundle_id);
+
+    let portalUrl = "http://sl.eduwav.com";
+
+    if (bundleId === 1235) {
+      portalUrl = "http://sl.yumzyy.com";
+    }
+
+    return res.redirect(
+      `${portalUrl}/auth/callback?status=failed&message=${encodeURIComponent(
+        e.response?.data?.message || "OTP verification failed."
+      )}`
     );
   }
 };
