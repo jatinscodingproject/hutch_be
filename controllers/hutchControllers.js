@@ -133,7 +133,6 @@ exports.verifyOtp = async (req, res) => {
           event_id: {
             [Op.in]: [1, 3],
           },
-          charge_result: 1,
           createdAt: {
             [Op.between]: [startOfDay, endOfDay],
           },
@@ -524,7 +523,6 @@ const redirectToPortal = async (req, res, portalUrl, expectedBundleId) => {
         event_id: {
           [Op.in]: [1, 3],
         },
-        charge_result: 1, // change to true if your DB stores boolean
         createdAt: {
           [Op.between]: [startOfDay, endOfDay],
         },
@@ -571,6 +569,7 @@ const redirectToPortal = async (req, res, portalUrl, expectedBundleId) => {
 
 // EduWav
 exports.redirectToReactLearn = async (req, res) => {
+  console.log(req)
   return redirectToPortal(
     req,
     res,
@@ -581,6 +580,7 @@ exports.redirectToReactLearn = async (req, res) => {
 
 // Yumzzy
 exports.redirectToReactYumzzy = async (req, res) => {
+  console.log(req)
   return redirectToPortal(
     req,
     res,
