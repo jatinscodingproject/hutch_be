@@ -83,7 +83,7 @@ exports.sendOtp = async (req, res) => {
 //   }
 // };
 
-const { Op } = require("sequelize");
+// const { Op } = require("sequelize");
 
 exports.verifyOtp = async (req, res) => {
   try {
