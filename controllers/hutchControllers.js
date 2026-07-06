@@ -1,6 +1,8 @@
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const { getToken } = require("../utils/hutchservice");
+const { Op } = require("sequelize");
+const CallbackLog = require("../models/model.callback");
 
 const baseUrl = process.env.HUTCH_BASE_URL;
 
@@ -172,70 +174,293 @@ exports.unsubscribe = async (req, res) => {
   }
 };
 
-exports.redirectToReactYumzzy = async (req, res) => {
-  try {
+// exports.redirectToReactYumzzy = async (req, res) => {
+//   try {
     
-    const bundle_id = req.query.bundle_id || "";
+//     const bundle_id = req.query.bundle_id || "";
 
-    const msisdn = req.session?.msisdn || null;
+//     const msisdn = req.session?.msisdn || null;
 
-    console.log("MSISDN:", msisdn);
-    console.log("Session ID:", req.sessionID);
-    console.log("Session Data:", req.session);
+//     console.log("MSISDN:", msisdn);
+//     console.log("Session ID:", req.sessionID);
+//     console.log("Session Data:", req.session);
 
+//     const jwtToken = jwt.sign(
+//       {
+//         bundle_id,
+//       },
+//       process.env.JWT_SECRET,
+//       {
+//         expiresIn: "24h",
+//       }
+//     );
+
+//     return res.redirect(
+//       `http://sl.yumzyy.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
+//     );
+//   } catch (error) {
+//     console.error("Redirect Error:", error);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: "Failed to redirect user",
+//     });
+//   }
+// };
+
+// exports.redirectToReactLearn = async (req, res) => {
+//   try {
+
+//     const bundle_id = req.query.bundle_id || "";
+
+//     const msisdn = req.session?.msisdn || null;
+
+//     console.log("MSISDN:", msisdn);
+//     console.log("Session ID:", req.sessionID);
+//     console.log("Session Data:", req.session);
+
+//     const jwtToken = jwt.sign(
+//       {
+//         bundle_id,
+//       },
+//       process.env.JWT_SECRET,
+//       {
+//         expiresIn: "24h",
+//       }
+//     );
+
+//     return res.redirect(
+//       `http://sl.eduwav.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
+//     );
+//   } catch (error) {
+//     console.error("Redirect Error:", error);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: "Failed to redirect user",
+//     });
+//   }
+// };
+
+// exports.redirectToReactYumzzy = async (req, res) => {
+//   try {
+//     const bundle_id = req.query.bundle_id || "";
+//     const msisdn = req.session?.msisdn;
+
+//     if (!msisdn) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "MSISDN not found.",
+//       });
+//     }
+
+//     const startOfDay = new Date();
+//     startOfDay.setHours(0, 0, 0, 0);
+
+//     const endOfDay = new Date();
+//     endOfDay.setHours(23, 59, 59, 999);
+
+//     const callback = await CallbackLog.findOne({
+//       where: {
+//         msisdn,
+//         event_id: {
+//           [Op.in]: [1, 3],
+//         },
+//         bundle_id : 1235,
+//         charge_result: 1, // use true if your column is BOOLEAN
+//         createdAt: {
+//           [Op.between]: [startOfDay, endOfDay],
+//         },
+//       },
+//       order: [["createdAt", "DESC"]],
+//     });
+
+//     if (!callback) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Insufficient balance. Subscription could not be activated.",
+//       });
+//     }
+
+//     const jwtToken = jwt.sign(
+//       {
+//         msisdn,
+//         bundle_id,
+//       },
+//       process.env.JWT_SECRET,
+//       {
+//         expiresIn: "24h",
+//       }
+//     );
+
+//     return res.redirect(
+//       `http://sl.eduwav.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
+//     );
+//   } catch (error) {
+//     console.error(error);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: "Failed to redirect user",
+//     });
+//   }
+// };
+
+// exports.redirectToReactLearn = async (req, res) => {
+//   try {
+//     const bundle_id = req.query.bundle_id || "";
+//     const msisdn = req.session?.msisdn;
+
+//     if (!msisdn) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "MSISDN not found.",
+//       });
+//     }
+
+//     const startOfDay = new Date();
+//     startOfDay.setHours(0, 0, 0, 0);
+
+//     const endOfDay = new Date();
+//     endOfDay.setHours(23, 59, 59, 999);
+
+//     const callback = await CallbackLog.findOne({
+//       where: {
+//         msisdn,
+//         event_id: {
+//           [Op.in]: [1, 3],
+//         },
+//         bundle_id : 1237,
+//         charge_result: 1, // use true if your column is BOOLEAN
+//         createdAt: {
+//           [Op.between]: [startOfDay, endOfDay],
+//         },
+//       },
+//       order: [["createdAt", "DESC"]],
+//     });
+
+//     if (!callback) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Insufficient balance. Subscription could not be activated.",
+//       });
+//     }
+
+//     const jwtToken = jwt.sign(
+//       {
+//         msisdn,
+//         bundle_id,
+//       },
+//       process.env.JWT_SECRET,
+//       {
+//         expiresIn: "24h",
+//       }
+//     );
+
+//     return res.redirect(
+//       `http://sl.eduwav.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
+//     );
+//   } catch (error) {
+//     console.error(error);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: "Failed to redirect user",
+//     });
+//   }
+// };
+
+// const { Op } = require("sequelize");
+// const jwt = require("jsonwebtoken");
+// const CallbackLog = require("../Models/CallbackLog");
+
+const redirectToPortal = async (req, res, portalUrl, expectedBundleId) => {
+  try {
+    const bundle_id = req.query.bundle_id || expectedBundleId;
+    const msisdn = req.session?.msisdn;
+
+    if (!msisdn) {
+      return res.redirect(
+        `${portalUrl}/auth/callback?status=failed&message=${encodeURIComponent(
+          "MSISDN not found."
+        )}`
+      );
+    }
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const callback = await CallbackLog.findOne({
+      where: {
+        msisdn,
+        bundle_id: expectedBundleId,
+        event_id: {
+          [Op.in]: [1, 3],
+        },
+        charge_result: 1, // change to true if your DB stores boolean
+        createdAt: {
+          [Op.between]: [startOfDay, endOfDay],
+        },
+      },
+      order: [["createdAt", "DESC"]],
+    });
+
+    // No successful callback today -> redirect with error
+    if (!callback) {
+      return res.redirect(
+        `${portalUrl}/auth/callback?status=failed&message=${encodeURIComponent(
+          "Insufficient balance. Subscription could not be activated."
+        )}`
+      );
+    }
+
+    // Successful callback -> generate JWT
     const jwtToken = jwt.sign(
       {
-        bundle_id,
+        msisdn,
+        bundle_id: expectedBundleId,
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "30d",
+        expiresIn: "24h",
       }
     );
 
     return res.redirect(
-      `http://sl.yumzyy.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
+      `${portalUrl}/auth/callback?status=success&token=${encodeURIComponent(
+        jwtToken
+      )}`
     );
   } catch (error) {
     console.error("Redirect Error:", error);
 
-    return res.status(500).json({
-      success: false,
-      message: "Failed to redirect user",
-    });
+    return res.redirect(
+      `${portalUrl}/auth/callback?status=failed&message=${encodeURIComponent(
+        "Something went wrong. Please try again."
+      )}`
+    );
   }
 };
 
+// EduWav
 exports.redirectToReactLearn = async (req, res) => {
-  try {
+  return redirectToPortal(
+    req,
+    res,
+    "http://sl.eduwav.com",
+    1237
+  );
+};
 
-    const bundle_id = req.query.bundle_id || "";
-
-    const msisdn = req.session?.msisdn || null;
-
-    console.log("MSISDN:", msisdn);
-    console.log("Session ID:", req.sessionID);
-    console.log("Session Data:", req.session);
-
-    const jwtToken = jwt.sign(
-      {
-        bundle_id,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "30d",
-      }
-    );
-
-    return res.redirect(
-      `http://sl.eduwav.com/auth/callback?token=${encodeURIComponent(jwtToken)}`
-    );
-  } catch (error) {
-    console.error("Redirect Error:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Failed to redirect user",
-    });
-  }
+// Yumzzy
+exports.redirectToReactYumzzy = async (req, res) => {
+  return redirectToPortal(
+    req,
+    res,
+    "http://sl.yumzyy.com",
+    1235
+  );
 };
