@@ -83,7 +83,7 @@ exports.sendOtp = async (req, res) => {
 //   }
 // };
 
-// const { Op } = require("sequelize");
+
 
 exports.verifyOtp = async (req, res) => {
   try {
@@ -122,7 +122,7 @@ exports.verifyOtp = async (req, res) => {
     const endOfDay = new Date();
     endOfDay.setHours(23, 59, 59, 999);
 
-    // Wait for Hutch callback (max 10 seconds)
+    // Wait for Hutch callback (up to 10 seconds)
     let callback = null;
 
     for (let i = 0; i < 5; i++) {
@@ -153,11 +153,12 @@ exports.verifyOtp = async (req, res) => {
     }
 
     if (!callback) {
-      return res.redirect(
-        `${portalUrl}/auth/callback?status=failed&message=${encodeURIComponent(
+      return res.json({
+        success: false,
+        redirectUrl: `${portalUrl}/auth/callback?status=failed&message=${encodeURIComponent(
           "Insufficient balance. Subscription could not be activated."
-        )}`
-      );
+        )}`,
+      });
     }
 
     const jwtToken = jwt.sign(
@@ -171,11 +172,15 @@ exports.verifyOtp = async (req, res) => {
       }
     );
 
-    return res.redirect(
-      `${portalUrl}/auth/callback?status=success&token=${encodeURIComponent(
+    return res.json({
+      success: true,
+      redirectUrl: `${portalUrl}/auth/callback?status=success&token=${encodeURIComponent(
         jwtToken
-      )}`
-    );
+      )}`,
+      token: jwtToken,
+      msisdn: number,
+      subscription: response.data,
+    });
   } catch (e) {
     console.error(e.response?.data || e);
 
@@ -187,11 +192,13 @@ exports.verifyOtp = async (req, res) => {
       portalUrl = "http://sl.yumzyy.com";
     }
 
-    return res.redirect(
-      `${portalUrl}/auth/callback?status=failed&message=${encodeURIComponent(
+    return res.status(500).json({
+      success: false,
+      redirectUrl: `${portalUrl}/auth/callback?status=failed&message=${encodeURIComponent(
         e.response?.data?.message || "OTP verification failed."
-      )}`
-    );
+      )}`,
+      message: e.response?.data?.message || "OTP verification failed.",
+    });
   }
 };
 
