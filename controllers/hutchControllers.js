@@ -377,7 +377,12 @@ exports.unsubscribe = async (req, res) => {
 const redirectToPortal = async (req, res, portalUrl, expectedBundleId) => {
   try {
     const bundle_id = req.query.bundle_id || expectedBundleId;
-    const msisdn = req.session?.msisdn;
+    const msisdn =
+      req.headers["msisdn"] ||
+      req.headers["x-msisdn"] ||
+      req.headers["subscriberid"] ||
+      req.headers["x-subscriber-id"] ||
+      req.session?.msisdn;
 
     if (!msisdn) {
       return res.redirect(
