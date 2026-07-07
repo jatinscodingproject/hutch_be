@@ -302,7 +302,8 @@ const redirectToPortal = async (req, res, portalUrl, expectedBundleId) => {
       req.headers["x-msisdn"] ||
       req.headers["subscriberid"] ||
       req.headers["x-subscriber-id"] ||
-      req.session?.msisdn;
+      req.session?.msisdn ||
+      req.body.number;
 
     if (!msisdn) {
       return res.redirect(
@@ -371,7 +372,7 @@ const redirectToPortal = async (req, res, portalUrl, expectedBundleId) => {
 
 // EduWav
 exports.redirectToReactLearn = async (req, res) => {
-  console.log(req)
+  console.log("<>>>>>>>>>>" , req.body)
   return redirectToPortal(
     req,
     res,
