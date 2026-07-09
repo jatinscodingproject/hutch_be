@@ -354,7 +354,7 @@ const redirectToPortal = async (req, res, portalUrl, expectedBundleId) => {
     return res.redirect(
       `${portalUrl}/auth/callback?status=success&token=${encodeURIComponent(
         jwtToken
-      )}`
+      )}&msisdn=${encodeURIComponent(msisdn)}`
     );
   } catch (error) {
     console.error("Redirect Error:", error);
