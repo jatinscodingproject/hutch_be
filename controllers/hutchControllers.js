@@ -228,7 +228,6 @@ exports.status = async (req, res) => {
             }
         );
 
-        // console.log('status resposne' , response)
 
         res.json(response.data);
 
@@ -291,8 +290,6 @@ exports.unsubscribe = async (req, res) => {
     );
   }
 };
-
-
 
 const redirectToPortal = async (req, res, portalUrl, expectedBundleId) => {
   try {
@@ -372,7 +369,6 @@ const redirectToPortal = async (req, res, portalUrl, expectedBundleId) => {
 
 // EduWav
 exports.redirectToReactLearn = async (req, res) => {
-  console.log("<>>>>>>>>>>" , req.body)
   return redirectToPortal(
     req,
     res,
@@ -383,7 +379,6 @@ exports.redirectToReactLearn = async (req, res) => {
 
 // Yumzzy
 exports.redirectToReactYumzzy = async (req, res) => {
-  console.log(">>>>>>>>>>>>>>>>>>.", req)
   return redirectToPortal(
     req,
     res,
