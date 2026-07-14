@@ -193,7 +193,7 @@ exports.verifyOtp = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      redirectUrl: `${portalUrl}/auth/callback?status=failed&message=${encodeURIComponent(
+      redirectUrl: `${portalUrl}/otp-flow/auth/callback?status=failed&message=${encodeURIComponent(
         e.response?.data?.message || "OTP verification failed."
       )}`,
       message: e.response?.data?.message || "OTP verification failed.",
