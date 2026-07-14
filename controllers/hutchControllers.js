@@ -232,6 +232,7 @@ exports.status = async (req, res) => {
         res.json(response.data);
 
     } catch (e) {
+      console.log(e)
         res.status(500).json(e.response?.data || e.message);
     }
 };
