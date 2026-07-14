@@ -202,39 +202,63 @@ exports.verifyOtp = async (req, res) => {
 };
 
 exports.status = async (req, res) => {
+  try {
+    const { number, bundle_id } = req.body;
 
-    try {
-        
-        const {
-            number,
-            bundle_id
-        } = req.body;
+    const token = await getToken();
 
-        const token = await getToken();
+    // const response = await axios.post(
+    //   `${baseUrl}/api/subscriptions/status`,
+    //   {
+    //     number,
+    //     bundle_id,
+    //   },
+    //   {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //       Accept: "application/json",
+    //       "Content-Type": "application/json",
+    //     },
+    //   }
+    // );
 
-        const response = await axios.post(
-            `${baseUrl}/api/subscriptions/status`,
-            {
-                number,
-                bundle_id
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    Accept: "application/json",
-                    "Content-Type":
-                        "application/json"
-                }
-            }
-        );
+    // Get latest callback log
+    const latestCallback = await CallbackLog.findOne({
+      where: {
+        msisdn: number,
+        bundle_id: Number(bundle_id),
+      },
+      order: [["createdAt", "DESC"]],
+    });
 
+    let is_active = false;
 
-        res.json(response.data);
-
-    } catch (e) {
-      console.log(e)
-        res.status(500).json(e.response?.data || e.message);
+    if (latestCallback) {
+      if (
+        latestCallback.event_id === 1 ||
+        latestCallback.event_id === 3
+      ) {
+        is_active = true;
+      } else if (latestCallback.event_id === 2) {
+        is_active = false;
+      }
     }
+
+    return res.json({
+      is_active,
+      latest_event_id: latestCallback?.event_id || null,
+    });
+
+  } catch (e) {
+    console.error(e.response?.data || e);
+
+    return res.status(500).json(
+      e.response?.data || {
+        success: false,
+        message: e.message,
+      }
+    );
+  }
 };
 
 exports.unsubscribe = async (req, res) => {
