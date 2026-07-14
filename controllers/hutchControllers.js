@@ -185,10 +185,10 @@ exports.verifyOtp = async (req, res) => {
 
     const bundleId = Number(req.body.bundle_id);
 
-    let portalUrl = "http://sl.eduwav.com";
+    let portalUrl = "http://sl.eduwav.com/otp-flow";
 
     if (bundleId === 1235) {
-      portalUrl = "http://sl.yumzyy.com";
+      portalUrl = "http://sl.yumzyy.com/otp-flow";
     }
 
     return res.status(500).json({
