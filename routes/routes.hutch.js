@@ -66,6 +66,11 @@ router.post("/redirect-eduwav", redirectToReactLearn);
       req.headers["subscriberid"] ||
       req.headers["x-subscriber-id"];
 
+      console.log("Original URL:", req.originalUrl);
+console.log("Query:", req.query);
+console.log("ext_ref:", req.query.ext_ref);
+console.log("subid:", req.query.subid);
+
     const origin = req.headers["origin"] || null;
 
     const clientIp =
