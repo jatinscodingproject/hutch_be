@@ -67,11 +67,11 @@ router.post("/redirect-eduwav", redirectToReactLearn);
       req.headers["x-subscriber-id"];
 
       console.log("Original URL:", req.originalUrl);
-console.log("Query:", req.query);
-console.log("ext_ref:", req.query.ext_ref);
-console.log("subid:", req.query.subid);
+      console.log("Query:", req.query);
+      console.log("ext_ref:", req.query.ext_ref);
+      console.log("subid:", req.query.subid);
 
-    const origin = req.headers["origin"] || null;
+    const origin = req.query.origin;
 
     const clientIp =
       req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
@@ -101,6 +101,7 @@ console.log("subid:", req.query.subid);
               real_ip: clientIp,
               subid: subid,
               user_agent: userAgent,
+              origin: origin
             }
           );
 
