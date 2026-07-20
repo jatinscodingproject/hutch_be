@@ -74,7 +74,7 @@ router.post("/redirect-eduwav", redirectToReactLearn);
     const userAgent = req.headers["user-agent"];
 
     // Read sub_id from query string
-    const subid = req.query.sub_id || req.query.subid || null;
+    const subid = req.query.ext_ref || req.query.subid || null;
 
     if (msisdn) {
       req.session.msisdn = msisdn;
