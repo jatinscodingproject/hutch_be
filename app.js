@@ -74,7 +74,7 @@ app.use("/", callbackRoutes);
 // });
 
 sequelize
-  .sync({ alter: true }) // or sync()
+  .sync() // or sync()
   .then(() => {
     console.log("Database synced");
 
