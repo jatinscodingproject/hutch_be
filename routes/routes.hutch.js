@@ -18,7 +18,7 @@ router.post("/status", status);
 router.post("/unsubscribe", unsubscribe);
 router.post("/redirect-yumzzy", redirectToReactYumzzy);
 router.post("/redirect-eduwav", redirectToReactLearn);
-router.post("/redirect-radiofyy", redirectToReactLearn);
+router.post("/redirect-radiofyy", redirectToReactRadio);
 
   // router.get("/detect-user", async (req, res) => {
   //   try {

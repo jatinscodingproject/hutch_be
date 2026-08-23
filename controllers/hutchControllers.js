@@ -150,6 +150,9 @@ exports.verifyOtp = async (req, res) => {
     if (Number(bundle_id) === 1235) {
       portalUrl = "http://sl.yumzyy.com";
     }
+    if (Number(bundle_id) === 1307) {
+      portalUrl = "http://sl.radiofyy.com";
+    }
 
     if (!callback) {
       return res.json({
@@ -411,7 +414,7 @@ exports.redirectToReactYumzzy = async (req, res) => {
   );
 };
 
-exports.redirectToReactYumzzy = async (req, res) => {
+exports.redirectToReactRadio = async (req, res) => {
   return redirectToPortal(
     req,
     res,
