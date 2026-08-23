@@ -364,7 +364,6 @@ const redirectToPortal = async (req, res, portalUrl, expectedBundleId) => {
       );
     }
 
-    // Successful callback -> generate JWT
     const jwtToken = jwt.sign(
       {
         msisdn,
@@ -409,5 +408,14 @@ exports.redirectToReactYumzzy = async (req, res) => {
     res,
     "http://sl.yumzyy.com",
     1235
+  );
+};
+
+exports.redirectToReactYumzzy = async (req, res) => {
+  return redirectToPortal(
+    req,
+    res,
+    "http://sl.radiofyy.com",
+    1307
   );
 };
