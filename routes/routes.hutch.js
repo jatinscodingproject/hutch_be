@@ -7,7 +7,8 @@ const {
     status,
     unsubscribe,
     redirectToReactYumzzy,
-    redirectToReactLearn
+    redirectToReactLearn,
+    redirectToReactRadio
 } = require("../controllers/hutchControllers");
 
 const router = express.Router();
