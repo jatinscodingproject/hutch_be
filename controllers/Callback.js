@@ -63,7 +63,6 @@ exports.storeCallback = async (req, res) => {
           postbackResponse.data
         );
       } catch (postbackError) {
-        // Don't fail the original callback if postback fails
         console.error(
           "Postback failed:",
           postbackError.response?.data || postbackError.message

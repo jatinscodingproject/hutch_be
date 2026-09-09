@@ -6,6 +6,26 @@ const CallbackLog = require("../models/model.callback");
 
 const baseUrl = process.env.HUTCH_BASE_URL;
 
+exports.getHutchToken = async (req, res) => {
+    try {
+        const token = await getToken();
+
+        return res.status(200).json({
+            success: true,
+            access_token: token
+        });
+
+    } catch (error) {
+        console.error("Hutch Token Error:", error.response?.data || error.message);
+
+        return res.status(500).json({
+            success: false,
+            message: "Unable to generate Hutch access token",
+            error: error.response?.data || error.message
+        });
+    }
+};
+
 exports.sendOtp = async (req, res) => {
   try {
     const { number, bundle_id } = req.body;
@@ -32,58 +52,6 @@ exports.sendOtp = async (req, res) => {
     return res.status(500).json(e.response?.data || e.message);
   }
 };
-
-// exports.verifyOtp = async (req, res) => {
-//   try {
-//     const { number, bundle_id, otp } = req.body;
-
-//     const token = await getToken();
-
-//     const response = await axios.post(
-//       `${baseUrl}/api/register-with-otp`,
-//       {
-//         number,
-//         bundle_id,
-//         otp,
-//       },
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//           Accept: "application/json",
-//         },
-//       }
-//     );
-
-//     // console.log('otp response' , response)
-
-//     const jwtToken = jwt.sign(
-//       {
-//         msisdn: number,
-//         bundle_id,
-//       },
-//       process.env.JWT_SECRET,
-//       {
-//         expiresIn: "24h",
-//       }
-//     );
-
-//     return res.json({
-//       success: true,
-//       token: jwtToken,
-//       subscription: response.data,
-//     });
-//   } catch (e) {
-//     console.log(e.response?.data || e);
-
-//     return res.status(500).json(
-//       e.response?.data || {
-//         message: "OTP verification failed",
-//       }
-//     );
-//   }
-// };
-
-
 
 exports.verifyOtp = async (req, res) => {
   try {

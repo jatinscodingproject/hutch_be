@@ -8,7 +8,8 @@ const {
     unsubscribe,
     redirectToReactYumzzy,
     redirectToReactLearn,
-    redirectToReactRadio
+    redirectToReactRadio,
+    getHutchToken
 } = require("../controllers/hutchControllers");
 
 const router = express.Router();
@@ -20,59 +21,14 @@ router.post("/unsubscribe", unsubscribe);
 router.post("/redirect-yumzzy", redirectToReactYumzzy);
 router.post("/redirect-eduwav", redirectToReactLearn);
 router.post("/redirect-radiofyy", redirectToReactRadio);
-// router.get("/redirect-radiofyy", redirectToReactRadio);
 
-  // router.get("/detect-user", async (req, res) => {
-  //   try {
-  //     const msisdn =
-  //       req.headers["msisdn"] ||
-  //       req.headers["x-msisdn"] ||
-  //       req.headers["subscriberid"] ||
-  //       req.headers["x-subscriber-id"];
-
-  //     if (msisdn) {
-  //       req.session.msisdn = msisdn;
-
-  //       console.log("Before save:", req.session);
-
-  //       req.session.save((err) => {
-  //         if (err) {
-  //           console.error("Session save error:", err);
-  //         }
-
-  //         console.log("After save:", req.session);
-
-  //         return res.json({
-  //           success: true,
-  //           detected: true,
-  //           msisdn,
-  //         });
-  //       });
-
-  //       return;
-  //     }
-
-  //     return res.json({
-  //       success: true,
-  //       detected: false,
-  //     });
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // });
-
-  router.get("/detect-user", async (req, res) => {
+router.get("/detect-user", async (req, res) => {
   try {
     const msisdn =
       req.headers["msisdn"] ||
       req.headers["x-msisdn"] ||
       req.headers["subscriberid"] ||
       req.headers["x-subscriber-id"];
-
-      console.log("Original URL:", req.originalUrl);
-      console.log("Query:", req.query);
-      console.log("ext_ref:", req.query.ext_ref);
-      console.log("subid:", req.query.subid);
 
     const origin = req.query.origin;
 
@@ -83,10 +39,7 @@ router.post("/redirect-radiofyy", redirectToReactRadio);
 
     const userAgent = req.headers["user-agent"];
 
-    // Read sub_id from query string
     const subid = req.query.ext_ref;
-
-    console.log(origin);
 
     if (msisdn) {
       req.session.msisdn = msisdn;
@@ -141,5 +94,7 @@ router.post("/redirect-radiofyy", redirectToReactRadio);
     });
   }
 });
+
+router.get("/hutch-token", getHutchToken);
 
 module.exports = router;
