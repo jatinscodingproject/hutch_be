@@ -24,6 +24,7 @@ router.post("/redirect-radiofyy", redirectToReactRadio);
 
 router.get("/detect-user", async (req, res) => {
   try {
+    console.log(req.headers);
     const msisdn =
       req.headers["msisdn"] ||
       req.headers["x-msisdn"] ||
