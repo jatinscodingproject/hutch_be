@@ -25,15 +25,16 @@ router.post("/redirect-radiofyy", redirectToReactRadio);
 router.get("/detect-user", async (req, res) => {
   try {
     console.log(req.headers);
+
     const msisdn =
       req.headers["msisdn"] ||
       req.headers["x-msisdn"] ||
       req.headers["subscriberid"] ||
       req.headers["x-subscriber-id"];
 
-    console.log('mssidn' , msisdn);
+    console.log("msisdn:", msisdn);
 
-    const origin = req.query.origin;
+    const origin = req.query.origin || req.headers.origin;
 
     const clientIp =
       req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
@@ -41,7 +42,6 @@ router.get("/detect-user", async (req, res) => {
       req.ip;
 
     const userAgent = req.headers["user-agent"];
-
     const subid = req.query.ext_ref;
 
     if (msisdn) {
@@ -53,16 +53,19 @@ router.get("/detect-user", async (req, res) => {
         }
 
         try {
-          const response = await axios.post(
-            "https://arenaxpro.com/api/new/bmd/services/customer/store-customer",
-            {
-              phone_number: msisdn,
-              real_ip: clientIp,
-              subid: subid,
-              user_agent: userAgent,
-              origin: origin
-            }
-          );
+          const apiUrl =
+            origin === "sl.radiofyy.com" ||
+            origin === "https://sl.radiofyy.com" || origin === "http://sl.radiofyy.com"
+              ? "https://arenaxpro.com/bm/radiofyy/servies"
+              : "https://arenaxpro.com/api/new/bmd/services/customer/store-customer";
+
+          const response = await axios.post(apiUrl, {
+            phone_number: msisdn,
+            real_ip: clientIp,
+            subid: subid,
+            user_agent: userAgent,
+            origin: origin,
+          });
 
           console.log("Customer API Response:", response.data);
         } catch (error) {
@@ -79,6 +82,7 @@ router.get("/detect-user", async (req, res) => {
           clientIp,
           subid,
           userAgent,
+          origin,
         });
       });
 
@@ -91,6 +95,7 @@ router.get("/detect-user", async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
