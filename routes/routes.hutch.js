@@ -34,7 +34,7 @@ router.get("/detect-user", async (req, res) => {
 
     console.log("msisdn:", msisdn);
 
-    const origin = req.query.origin || req.headers.origin;
+    const origin =  req.headers.host;
 
     const clientIp =
       req.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
